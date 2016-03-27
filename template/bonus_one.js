@@ -25,13 +25,35 @@
 var search_suggestions;
 
 function predictive_search() {
-	console.log(search_suggestions);
+	var hide_list = true;
+	var search_text = $(this).val();
+	var i;
+	$(".search-suggestion").remove();
+	for(i = 0; i < search_suggestions.length; i++) {
+		if(search_text !== "" && search_suggestions[i].toLowerCase().indexOf(search_text.toLowerCase()) > -1) {
+			var suggestion_html = $("<li class=\"search-suggestion\"><a class=\"search-suggestion\" href=#>" + search_suggestions[i] + "</a></li>");
+			console.log(suggestion_html);
+			$(".search-suggestions-wrapper ul").append(suggestion_html);
+			hide_list = false;
+		}
+	}
+
+	if(hide_list) {
+		$(".search-suggestions").hide();
+	} else {
+		$(".search-suggestions").show();
+	}
 }
 
 $(function () {
 	$.getJSON("http://www.mattbowytz.com/simple_api.json", "data=all", function(data) {
 		search_suggestions = data.data.interests;
 		search_suggestions.push.apply(search_suggestions, data.data.programming);
+
+		// var i;
+		// for (i = 0; i < search_suggestions.length; ++i) {
+		//     $(".search-sugesstions").append("<li class=\"search-sugesstion\"><a class=\"search-sugesstion\" href=#>" + search_suggestions[i] + "</a></li>");
+		// }
 		console.log("Suggestions ready");
 	});
 	$(".flexsearch-input").keyup(predictive_search);
