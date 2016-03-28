@@ -1,6 +1,9 @@
-# bonus1
-cs1520 Bonus 1 files and submission
+# ajp99 version of bonus1
 
-# Instructions
-* Fork this repo, so you have a personal, local version (click the "fork" button in the upper right corner of this page)
-* Push to your repo and send me a link or something like that
+This is my version of the predictive search project, I didn't do a bunch of CSS manipulation because I am very
+new to jquery.  If you think any of the ways I accomplished the requirements could be accomplished
+in a more jquery-esque way do let me know.
+
+Thanks,
+
+Andrew
