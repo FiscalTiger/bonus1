@@ -1,29 +1,11 @@
-// The anonymous function below will fire on page load
-
-// Some things to consider
-// $.ajax(); to make your requests a little easier. Or the vanilla js way, it's up to you.
-// $.on(); for event handling
-// Remember, selecting elements in jQuery is like selecting them in CSS
-// You'll probably have to manipulate some strings
-// some jQuery functions to help display results
-// $.show(), $.hide(), $.slideup(), $.slidedown(), $.fadein(), $.fadeout()
-// Add content from requests with something like
-// $.html(), $.text(), etc.
-// keyup events could be helpful to get value of field as the user types
-
-// (function() {
-// 	var json;
-// 	$.getJSON("http://www.mattbowytz.com/simple_api.json", "data=all", function(data) {
-// 		json = data;
-// 		console.log(json);
-// 	});
-//
-// 	console.log(json);
-// 	console.log('Keepin\'n it clean with an external script!');
-// })();
+/*
+	This script uses jquery to suggest searches to the users based off what they
+	have typed into the search bar
+*/
 
 var search_suggestions;
 
+// Display the correct search suggestions
 function predictive_search() {
 	var hide_list = true;
 	var search_text = $(this).val();
@@ -31,13 +13,18 @@ function predictive_search() {
 	$(".search-suggestion").remove();
 	for(i = 0; i < search_suggestions.length; i++) {
 		if(search_text !== "" && search_suggestions[i].toLowerCase().indexOf(search_text.toLowerCase()) > -1) {
-			var suggestion_html = $("<li class=\"search-suggestion\"><a class=\"search-suggestion\" href=#>" + search_suggestions[i] + "</a></li>");
+			//create the html for search suggestion
+			var suggestion_html =
+				$("<li class=\"search-suggestion\"><a class=\"search-suggestion\" href=\"http://www.google.com/search?q=" +
+				search_suggestions[i] + "\">" + search_suggestions[i] + "</a></li>");
 			console.log(suggestion_html);
 			$(".search-suggestions-wrapper ul").append(suggestion_html);
 			hide_list = false;
 		}
 	}
 
+	// Hide list if there aren't any suggestions to show
+	// else show the list
 	if(hide_list) {
 		$(".search-suggestions").hide();
 	} else {
@@ -46,15 +33,20 @@ function predictive_search() {
 }
 
 $(function () {
+	// Get the search suggestions from simple_api.json
 	$.getJSON("http://www.mattbowytz.com/simple_api.json", "data=all", function(data) {
 		search_suggestions = data.data.interests;
 		search_suggestions.push.apply(search_suggestions, data.data.programming);
 
-		// var i;
-		// for (i = 0; i < search_suggestions.length; ++i) {
-		//     $(".search-sugesstions").append("<li class=\"search-sugesstion\"><a class=\"search-sugesstion\" href=#>" + search_suggestions[i] + "</a></li>");
-		// }
 		console.log("Suggestions ready");
 	});
+	// make google search from current input
+	$(".flexsearch-submit").click(function() {
+		var search_text = $(".flexsearch-input").val();
+		window.location.href='http://www.google.com/search?q=' + search_text;
+		return false;
+	});
+
+	//event handler to come up with search suggestions
 	$(".flexsearch-input").keyup(predictive_search);
 });
